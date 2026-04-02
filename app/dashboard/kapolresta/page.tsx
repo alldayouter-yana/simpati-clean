@@ -17,12 +17,10 @@ export default function KapolrestaDashboard() {
 
   const loadData = async () => {
     try {
-      // Get total personel
       const { count: personelCount } = await supabase
         .from('personel')
         .select('*', { count: 'exact', head: true })
 
-      // Get pengajuan bulan ini
       const startOfMonth = new Date()
       startOfMonth.setDate(1)
 
@@ -35,7 +33,6 @@ export default function KapolrestaDashboard() {
       const selesai = naskahData?.filter(n => n.status === 'selesai').length || 0
       const approvalRate = total > 0 ? Math.round((selesai / total) * 100) : 0
 
-      // Hitung avg response time
       const withProcessTime = naskahData?.filter(n => n.total_hari_proses) || []
       const avgTime = withProcessTime.length > 0
         ? withProcessTime.reduce((sum, n) => sum + n.total_hari_proses, 0) / withProcessTime.length
@@ -69,7 +66,6 @@ export default function KapolrestaDashboard() {
         <p className="text-gray-600 mt-1">Executive Summary - Sistem SIMPATI</p>
       </div>
 
-      {/* Executive Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-xl shadow-lg text-white">
           <div className="flex items-center justify-between mb-4">
@@ -117,7 +113,6 @@ export default function KapolrestaDashboard() {
         </div>
       </div>
 
-      {/* Key Highlights */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
         <h2 className="text-xl font-bold mb-6">Key Highlights</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -180,7 +175,6 @@ export default function KapolrestaDashboard() {
         </div>
       </div>
 
-      {/* System Info */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
