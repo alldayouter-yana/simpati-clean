@@ -59,7 +59,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">SIMPATI</h1>
           <p className="text-gray-600 text-sm">
-            Sistem Monitoring Pelayanan<br/>
+            Sistem Manajemen Pelayanan<br/>
             Administrasi Cuti dan Izin
           </p>
         </div>
