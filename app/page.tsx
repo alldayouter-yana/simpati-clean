@@ -36,13 +36,13 @@ export default function LoginPage() {
       throw new Error('Profil user tidak ditemukan di tabel profiles')
     }
 
-    const roleRoutes: Record<string, string> = {
-      operator: '/dashboard/staff',
-      kasubbagwatpers: '/dashboard/kasubbag',
-      kabag_sdm: '/dashboard/kabag',
-      pimpinan: '/dashboard/kapolresta',
-      admin: '/dashboard/admin',
-    }
+const roleRoutes: Record<string, string> = {
+  operator: '/dashboard/staff',
+  kasubbagwatpers: '/dashboard/kasubbag',
+  kabag_sdm: '/dashboard/kabag',
+  pimpinan: '/dashboard/kapolresta',
+  admin: '/dashboard/admin',
+}
 
     const targetRoute = roleRoutes[profile.role]
 
