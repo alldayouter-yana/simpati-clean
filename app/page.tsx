@@ -143,11 +143,13 @@ switch (profile.role) {
         <div className="mt-8 p-4 bg-gray-50 rounded-lg">
           <p className="text-xs text-gray-600 font-semibold mb-2">Demo Accounts:</p>
           <div className="space-y-1 text-xs text-gray-500">
-            <p>• watpers@demo.id</p>
-            <p>• kasubbag@demo.id</p>
-            <p>• kabag@demo.id</p>
+            <p>• operator.watpers@demo.id</p>
+            <p>• kasubbagwatpers@demo.id</p>
+            <p>• kabagsdm@demo.id</p>
             <p>• kapolresta@demo.id</p>
-            <p className="text-gray-400 mt-2">Password: simpati2026</p>
+            <p>• admin.sistem@demo.id</p>
+            <p className="text-gray-400 mt-2">Password: Simpati2026!</p>
+           
           </div>
         </div>
       </div>
