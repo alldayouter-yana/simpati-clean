@@ -11,64 +11,52 @@ export default function LoginPage() {
   const [error, setError] = useState('')
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+  e.preventDefault()
+  setLoading(true)
+  setError('')
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-  email,
-  password,
-})
+  try {
+    const normalizedEmail = email.trim().toLowerCase()
 
-if (error) throw error
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: normalizedEmail,
+      password,
+    })
 
-const user = data.user
+    if (error) throw error
+    if (!data.user) throw new Error('User tidak ditemukan setelah login')
 
-if (!user) {
-  throw new Error('User tidak ditemukan setelah login')
-}
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id, email, nama, role')
+      .eq('id', data.user.id)
+      .single()
 
-const { data: profile, error: profileError } = await supabase
-  .from('profiles')
-  .select('id, email, nama, role')
-  .eq('id', user.id)
-  .single()
-
-if (profileError || !profile) {
-  throw new Error('Profil user tidak ditemukan di tabel profiles')
-}
-
-switch (profile.role) {
-  case 'operator':
-    router.push('/dashboard/staff')
-    break
-
-  case 'kasubbagwatpers':
-    router.push('/dashboard/kasubbag')
-    break
-
-  case 'kabag_sdm':
-    router.push('/dashboard/kabag')
-    break
-
-  case 'pimpinan':
-    router.push('/dashboard/kapolresta')
-    break
-
-  case 'admin':
-    router.push('/dashboard/admin')
-    break
-
-  default:
-    throw new Error(`Role tidak dikenali: ${profile.role}`)
-}
-    } catch (error: any) {
-      setError(error.message || 'Login gagal')
-    } finally {
-      setLoading(false)
+    if (profileError || !profile) {
+      throw new Error('Profil user tidak ditemukan di tabel profiles')
     }
+
+    const roleRoutes: Record<string, string> = {
+      operator: '/dashboard/staff',
+      kasubbagwatpers: '/dashboard/kasubbag',
+      kabag_sdm: '/dashboard/kabag',
+      pimpinan: '/dashboard/kapolresta',
+      admin: '/dashboard/admin',
+    }
+
+    const targetRoute = roleRoutes[profile.role]
+
+    if (!targetRoute) {
+      throw new Error(`Role tidak dikenali: ${profile.role}`)
+    }
+
+    router.push(targetRoute)
+  } catch (error: any) {
+    setError(error.message || 'Login gagal')
+  } finally {
+    setLoading(false)
   }
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center p-4">
