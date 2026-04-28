@@ -17,24 +17,52 @@ export default function LoginPage() {
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+  email,
+  password,
+})
 
-      if (error) throw error
+if (error) throw error
 
-      // Redirect based on email
-      if (email === 'watpers@demo.id') {
-        router.push('/dashboard/staff')
-      } else if (email === 'kasubbag@demo.id') {
-        router.push('/dashboard/kasubbag')
-      } else if (email === 'kabag@demo.id') {
-        router.push('/dashboard/kabag')
-      } else if (email === 'kapolresta@demo.id') {
-        router.push('/dashboard/kapolresta')
-      } else {
-        router.push('/dashboard/personel')
-      }
+const user = data.user
+
+if (!user) {
+  throw new Error('User tidak ditemukan setelah login')
+}
+
+const { data: profile, error: profileError } = await supabase
+  .from('profiles')
+  .select('id, email, nama, role')
+  .eq('id', user.id)
+  .single()
+
+if (profileError || !profile) {
+  throw new Error('Profil user tidak ditemukan di tabel profiles')
+}
+
+switch (profile.role) {
+  case 'operator':
+    router.push('/dashboard/staff')
+    break
+
+  case 'kasubbagwatpers':
+    router.push('/dashboard/kasubbag')
+    break
+
+  case 'kabag_sdm':
+    router.push('/dashboard/kabag')
+    break
+
+  case 'pimpinan':
+    router.push('/dashboard/kapolresta')
+    break
+
+  case 'admin':
+    router.push('/dashboard/admin')
+    break
+
+  default:
+    throw new Error(`Role tidak dikenali: ${profile.role}`)
+}
     } catch (error: any) {
       setError(error.message || 'Login gagal')
     } finally {
